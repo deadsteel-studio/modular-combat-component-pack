@@ -311,7 +311,7 @@ Because invulnerability is decided through `CanReceiveDamage` on the character, 
 
 The default dodge/roll animation included with this package is used under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
 
-- Animation: **[Animation pack name]** by **[Creator name]** — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Animation: **Free Animation Sample Pack** by **VanillaLoop** — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 > Replace the bracketed placeholders above with the exact creator name and pack title before publishing.
 
