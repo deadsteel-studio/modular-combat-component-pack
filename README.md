@@ -193,7 +193,7 @@ The default `hand_r` socket alone gives a single-point trace, which is fine for 
 3. On the Attack Component, set `Trace Start Socket Name` to `Socket_SwordStart` and `Trace End Socket Name` to `Socket_SwordEnd`.
 4. Enable `Draw Debug Trace` temporarily and play the attack animation — you should see the debug sweep travel along the blade from hilt to tip.
 
-<!-- gif: debug trace sweeping along a sword blade between two sockets -->
+![Debug trace sweeping along a sword blade between two sockets](images/weapon-trace-sweep.gif)
 
 > **Note:** Socket names are typed in as plain text (`FName`) and are not validated against the mesh in the editor — a typo will silently fall back to the character's location rather than throwing an error. If the debug trace doesn't appear where expected, double-check the socket name spelling first.
 
@@ -256,7 +256,7 @@ A single Notify State that marks the invulnerability window of a dodge.
 3. Drag the notify onto the section of the animation where the character should be invulnerable (for example, the middle portion of a roll, not the recovery frames at the start or end).
 4. Resize it by dragging its edges to match the desired duration.
 
-<!-- gif: adding AN_DodgeIFrame to the montage timeline and resizing it -->
+![Adding the Dodge I-Frame notify to the montage timeline](images/dodge-notify.gif)
 
 While this notify is active, the Dodge Component's `Is Dodging` flag is `true`, and any character whose `CanReceiveDamage` checks that flag will be immune to the Attack Component's damage.
 
@@ -268,7 +268,7 @@ A single Notify State that drives the hit-detection sweep for the duration it co
 2. **Add Notify State... > Attack Trace**, from the same right-click menu.
 3. Drag it onto the section of the swing where the weapon (or fist) should actually be able to hit something — not the wind-up or the recovery.
 
-<!-- gif: adding AN_AttackTrace to the montage timeline -->
+![Adding the Attack Trace notify to the montage timeline](images/attack-notify.gif)
 
 On `NotifyBegin` the attack window opens (and the per-attack hit list is cleared); every tick while the notify is active, a sweep trace runs between the Trace Start Socket and Trace End Socket; on `NotifyEnd` the window closes.
 
@@ -311,7 +311,7 @@ Because invulnerability is decided through `CanReceiveDamage` on the character, 
 
 The default dodge/roll animation included with this package is used under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
 
-- Animation: **Free Animation Sample Pack** by **VanillaLoop** — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Animation: **[Animation pack name]** by **[Creator name]** — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 > Replace the bracketed placeholders above with the exact creator name and pack title before publishing.
 
