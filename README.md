@@ -5,6 +5,8 @@ Version 1.0 • Unreal Engine 5.3 – 5.8 • DeadSteel Studio
 
 A modular, interface-driven combat toolkit for Unreal Engine 5. Drop four independent Actor Components onto any character to add dodge, melee attack, stamina, and health systems — each usable on its own or together, with built-in UI, sensible defaults, and full Blueprint access.
 
+![Modular Combat Component Pack in the Unreal Editor](components-overview.png)
+
 ## Table of Contents
 
 1. [Overview](#1-overview)
@@ -36,7 +38,7 @@ Modular Combat Component Pack provides four self-contained Actor Components — 
 | **Dodge Component** | Root-motion dodge/roll with directional (4-way) or single-animation modes and i-frame invulnerability. | Stamina Component (optional) |
 | **Attack Component** | Melee attack with randomized animation variations and a sphere-sweep hit trace between two sockets. | Stamina Component (optional) |
 
-<!-- screenshot: the four components added on a character in the Details panel -->
+![All four components added to a character, shown in the Components panel](components-added.png)
 
 ### 1.2 Design principles
 
@@ -77,7 +79,7 @@ If you downloaded a `.zip` directly from the Fab website instead of using one of
 2. Open your project. Unreal Engine will detect the plugin.
 3. Continue from step 3 above (Edit > Plugins > enable).
 
-<!-- screenshot: Edit > Plugins with the plugin enabled -->
+![Edit > Plugins with the plugin enabled](plugin-enabled.png)
 
 ---
 
@@ -119,6 +121,8 @@ Tracks a stamina pool that regenerates automatically after a delay following the
 **Events**
 - `OnStaminaChanged(NewValue, MaxValue)` — broadcast whenever stamina changes; drives the stamina widget.
 
+![Stamina Component Details panel](stamina-component-details.png)
+
 ### 5.2 Health Component
 
 Tracks health and exposes the functions used to modify it from anywhere — combat, healing items, scripted events, or a custom inventory system.
@@ -138,6 +142,8 @@ Tracks health and exposes the functions used to modify it from anywhere — comb
 - `OnDeath()` — broadcast once when health reaches zero.
 
 > **Note:** The Health Component intentionally does not implement `IDamageable` itself. The interface belongs on the owning Actor (see [Section 7](#7-the-idamageable-interface)); the component only stores the data and exposes the functions the Actor calls.
+
+![Health Component Details panel](health-component-details.png)
 
 ### 5.3 Dodge Component
 
@@ -160,7 +166,7 @@ A root-motion dodge/roll with two modes, selectable per character:
 **Functions**
 - `TryDodge()` — checks stamina, plays the resolved montage. Safe to bind directly to input or call from Blueprint.
 
-<!-- screenshot: Dodge Component Details panel, directional mode toggled on -->
+![Dodge Component Details panel, directional mode enabled](dodge-component-details.png)
 
 ### 5.4 Attack Component
 
@@ -193,7 +199,7 @@ The default `hand_r` socket alone gives a single-point trace, which is fine for 
 3. On the Attack Component, set `Trace Start Socket Name` to `Socket_SwordStart` and `Trace End Socket Name` to `Socket_SwordEnd`.
 4. Enable `Draw Debug Trace` temporarily and play the attack animation — you should see the debug sweep travel along the blade from hilt to tip.
 
-![Debug trace sweeping along a sword blade between two sockets](images/weapon-trace-sweep.gif)
+![Debug trace sweeping along a sword blade between two sockets](attack-trace-gif.gif)
 
 > **Note:** Socket names are typed in as plain text (`FName`) and are not validated against the mesh in the editor — a typo will silently fall back to the character's location rather than throwing an error. If the debug trace doesn't appear where expected, double-check the socket name spelling first.
 
@@ -218,7 +224,7 @@ Stamina and Health each have their own widget, but both are inserted into a sing
 
 Duplicate `WBP_StaminaWidget` or `WBP_HealthWidget`, bind your own visuals to the `OnStaminaUpdated` / `OnHealthUpdated` event (which supplies the current value, max value, and pre-calculated percent), and assign your version to the component's `Widget Class` field.
 
-<!-- gif: dragging a Named Slot into WBP_MainHUD and naming it StaminaSlot -->
+![WBP_MainHUD with StaminaSlot and HealthSlot named slots placed on the canvas](main-hud-named-slots.png)
 
 ---
 
@@ -235,7 +241,7 @@ Combat damage is routed entirely through a native interface, `IDamageable`, rath
 2. In the Interfaces section of My Blueprint, implement `ReceiveCombatHit` — typically a single call to your Health Component's Apply Damage.
 3. Implement `CanReceiveDamage` — for a character using the Dodge Component, return `NOT Is Dodging`.
 
-<!-- screenshot: Class Settings with IDamageable added under Implemented Interfaces -->
+![Class Settings with IDamageable added under Implemented Interfaces](interface-implemented.png)
 
 > **Note:** The interface function is named `ReceiveCombatHit` rather than `ReceiveHit` specifically to avoid colliding with `AActor`'s built-in physics collision event of the same name.
 
@@ -256,7 +262,7 @@ A single Notify State that marks the invulnerability window of a dodge.
 3. Drag the notify onto the section of the animation where the character should be invulnerable (for example, the middle portion of a roll, not the recovery frames at the start or end).
 4. Resize it by dragging its edges to match the desired duration.
 
-![Adding the Dodge I-Frame notify to the montage timeline](images/dodge-notify.gif)
+![Adding the Dodge I-Frame notify to the montage timeline](dodge-gif.gif)
 
 While this notify is active, the Dodge Component's `Is Dodging` flag is `true`, and any character whose `CanReceiveDamage` checks that flag will be immune to the Attack Component's damage.
 
@@ -268,7 +274,7 @@ A single Notify State that drives the hit-detection sweep for the duration it co
 2. **Add Notify State... > Attack Trace**, from the same right-click menu.
 3. Drag it onto the section of the swing where the weapon (or fist) should actually be able to hit something — not the wind-up or the recovery.
 
-![Adding the Attack Trace notify to the montage timeline](images/attack-notify.gif)
+![Adding the Attack Trace notify to the montage timeline](attack-gif.gif)
 
 On `NotifyBegin` the attack window opens (and the per-attack hit list is cleared); every tick while the notify is active, a sweep trace runs between the Trace Start Socket and Trace End Socket; on `NotifyEnd` the window closes.
 
