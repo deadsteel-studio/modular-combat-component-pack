@@ -184,6 +184,19 @@ A melee attack with randomized animation variation and a socket-to-socket sweep 
 
 > **Note:** By default, Dodge and Attack block each other while either is in progress (an attack input during a dodge, or a dodge input during an attack, is simply ignored). This is controlled independently on each component via `Can Interrupt Attack` / `Can Interrupt Dodge`, so you can allow either or both to cancel into one another if your combat design calls for it.
 
+#### Setting up a weapon trace (e.g. a sword)
+
+The default `hand_r` socket alone gives a single-point trace, which is fine for unarmed attacks. For a weapon, add two sockets to the weapon's mesh (or the mesh it's attached to) and reference them by name:
+
+1. In the Skeletal Mesh or Static Mesh editor for the weapon, open the Skeleton Tree / socket list and add two sockets — for example `Socket_SwordStart` at the base of the blade (near the hilt) and `Socket_SwordEnd` at the tip.
+2. Position each socket so it sits directly on the blade, not floating off to the side — this is what the trace will sweep between.
+3. On the Attack Component, set `Trace Start Socket Name` to `Socket_SwordStart` and `Trace End Socket Name` to `Socket_SwordEnd`.
+4. Enable `Draw Debug Trace` temporarily and play the attack animation — you should see the debug sweep travel along the blade from hilt to tip.
+
+<!-- gif: debug trace sweeping along a sword blade between two sockets -->
+
+> **Note:** Socket names are typed in as plain text (`FName`) and are not validated against the mesh in the editor — a typo will silently fall back to the character's location rather than throwing an error. If the debug trace doesn't appear where expected, double-check the socket name spelling first.
+
 ---
 
 ## 6. HUD & Widget System
