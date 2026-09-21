@@ -242,6 +242,8 @@ Combat damage is routed entirely through a native interface, `IDamageable`, rath
 - `ReceiveCombatHit(DamageAmount, HitInfo)` — called on a successful hit. Typically forwards to your Health Component's `ApplyDamage`, but can drive any system you want.
 - `CanReceiveDamage() → bool` — queried before damage is applied. Return `false` while the Actor should be invulnerable (for example, checking the Dodge Component's `Is Dodging` flag) to implement i-frames.
 
+> **Note:** Implementing `IDamageable` alone is not enough — `CanReceiveDamage` must actually be wired to return `true` (or your own condition) for damage to register. A pure function left with no Return Value connected, or that always evaluates to `false`, means `ReceiveCombatHit` is simply never called and no error is shown. This is the most common reason a target appears to take no damage during testing.
+
 **Implementing it on a character**
 1. Open the character's Class Settings and add `IDamageable` under Implemented Interfaces.
 2. In the Interfaces section of My Blueprint, implement `ReceiveCombatHit` — typically a single call to your Health Component's Apply Damage.
@@ -266,7 +268,7 @@ The plugin's demo level already includes a working dummy target you can inspect 
 
 ![CanReceiveDamage implementation, returning true](dummy-can-receive-damage.png)
 
-> **Note:** This is deliberately the simplest possible `IDamageable` implementation. A real enemy would typically forward `ReceiveCombatHit` to its own Health Component (as described for the player character above) rather than a Print String.
+> **Note:** This is deliberately the simplest possible `IDamageable` implementation. A real enemy would typically forward `ReceiveCombatHit` to its own Health Component (as described for the player character above) rather than a Print String. If you add AI-controlled enemies and they don't need to dodge, `CanReceiveDamage` should simply return `true` — the invulnerability check is only meaningful for Actors that have a Dodge Component or an equivalent i-frame state of their own.
 
 ---
 
