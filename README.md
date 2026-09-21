@@ -224,6 +224,12 @@ Stamina and Health each have their own widget, but both are inserted into a sing
 
 Duplicate `WBP_StaminaWidget` or `WBP_HealthWidget`, bind your own visuals to the `OnStaminaUpdated` / `OnHealthUpdated` event (which supplies the current value, max value, and pre-calculated percent), and assign your version to the component's `Widget Class` field.
 
+Health and Stamina each have their own small widget — they are separate Widget Blueprints, each with its own Progress Bar, and each simply binds its component's Updated event to Set Percent on that bar:
+
+![WBP_HealthWidget binding OnHealthUpdated to Set Percent on its Progress Bar](health-widget-bind.png)
+
+![WBP_StaminaWidget binding OnStaminaUpdated to Set Percent on its Progress Bar](stamina-widget-bind.png)
+
 ![WBP_MainHUD with StaminaSlot and HealthSlot named slots placed on the canvas](main-hud-named-slots.png)
 
 ---
@@ -244,6 +250,23 @@ Combat damage is routed entirely through a native interface, `IDamageable`, rath
 ![Class Settings with IDamageable added under Implemented Interfaces](interface-implemented.png)
 
 > **Note:** The interface function is named `ReceiveCombatHit` rather than `ReceiveHit` specifically to avoid colliding with `AActor`'s built-in physics collision event of the same name.
+
+#### Example: a testable dummy target
+
+The plugin's demo level already includes a working dummy target you can inspect directly, but here is how to build one from scratch — useful both as a way to test the Attack Component on something other than your own character, and as the simplest possible example of implementing `IDamageable`.
+
+1. Create a new Actor Blueprint (e.g. `BP_DummyTarget`) and add a Static Mesh Component to it — any simple shape (a cube or cylinder) works.
+2. Set the mesh's collision so it responds to the Pawn channel (Block or Overlap), since the Attack Component's sphere sweep traces against that channel.
+3. Open Class Settings and add `IDamageable` under Implemented Interfaces.
+4. Implement `ReceiveCombatHit`: for a first test, a single Print String node showing the `DamageAmount` is enough to confirm the hit is being received; from there you can drive a health bar, a hit flash, or a destroy-on-death sequence.
+5. Implement `CanReceiveDamage` returning `true` (a static test target has no invulnerability state to check).
+6. Drag a few instances of `BP_DummyTarget` into your test level and attack them — a successful hit prints the damage amount, and `OnAttackHit` fires on the Attack Component with the same target as `HitActor`.
+
+![ReceiveCombatHit implementation, printing the damage amount and hit actor name](dummy-receive-hit.png)
+
+![CanReceiveDamage implementation, returning true](dummy-can-receive-damage.png)
+
+> **Note:** This is deliberately the simplest possible `IDamageable` implementation. A real enemy would typically forward `ReceiveCombatHit` to its own Health Component (as described for the player character above) rather than a Print String.
 
 ---
 
@@ -317,9 +340,7 @@ Because invulnerability is decided through `CanReceiveDamage` on the character, 
 
 The default dodge/roll animation included with this package is used under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
 
-- Animation: **[Free Sample Animation Set]** by **[VanillaLoop]** — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
-
-> Replace the bracketed placeholders above with the exact creator name and pack title before publishing.
+- Animation: **Free Sample Animation Set** by **VanillaLoop** — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 ---
 
