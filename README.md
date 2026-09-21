@@ -59,11 +59,23 @@ Modular Combat Component Pack provides four self-contained Actor Components — 
 
 ## 3. Installation
 
-1. Copy the plugin folder into your project's `Plugins/` directory (create this folder if it does not exist).
-2. Open your project. Unreal Engine will detect the new plugin.
+### 3.1 Recommended: install through Fab
+
+This package is distributed as a Code Plugin (Engine Plugin download type). When installed through an official Fab downloader, it is installed once to your chosen engine version and is then available to any project using that engine — no manual file copying is required.
+
+1. Install the plugin via the Epic Games Launcher (Fab tab) or the in-editor Fab browser (Content Browser > Fab), and choose the engine version you want it installed to.
+2. Open your project.
 3. Go to **Edit > Plugins**, search for "Modular Combat Component Pack", and make sure it is enabled.
 4. Restart the editor if prompted.
 5. The plugin's content (components, widgets, demo character, and default animations) is now available under Plugins content in the Content Browser (enable **Show Plugin Content** from the Content Browser settings if it is not visible).
+
+### 3.2 Manual installation (.zip download)
+
+If you downloaded a `.zip` directly from the Fab website instead of using one of the installers above:
+
+1. Extract the `.zip` into your engine's Plugins folder (or your project's own `Plugins/` folder, if you prefer a per-project install).
+2. Open your project. Unreal Engine will detect the plugin.
+3. Continue from step 3 above (Edit > Plugins > enable).
 
 <!-- screenshot: Edit > Plugins with the plugin enabled -->
 
@@ -140,6 +152,7 @@ A root-motion dodge/roll with two modes, selectable per character:
 - `Directional Dodge Montages` — used in directional mode.
 - `Dodge Stamina Cost` (float). Default: `20`.
 - `Dodge Input Action` — pre-assigned to the plugin's default Input Action; override to remap.
+- `Can Interrupt Attack` (bool) — if `false` (default), `TryDodge` is blocked while this Actor's Attack Component has an attack in progress, so a dodge input cannot cancel an ongoing attack. Set to `true` to allow dodging out of an attack at any time.
 
 **Runtime state**
 - `Is Dodging` (bool, read-only) — true only while the notify-driven invulnerability window is active (see [Section 8](#8-animation-notify-setup-required)).
@@ -161,12 +174,15 @@ A melee attack with randomized animation variation and a socket-to-socket sweep 
 - `Trace Start Socket Name` / `Trace End Socket Name` (FName) — two skeletal mesh sockets defining the sweep. Start defaults to `hand_r`. Leaving End empty collapses the sweep to a single point (suitable for unarmed attacks); setting both (e.g. a weapon's hilt and tip sockets) sweeps a capsule along the weapon's blade.
 - `Attack Input Action` — pre-assigned to the plugin's default Input Action.
 - `Draw Debug Trace` (bool) — visualizes the sweep in PIE for tuning. Leave off in shipped builds.
+- `Can Interrupt Dodge` (bool) — if `false` (default), `TryAttack` is blocked while this Actor's Dodge Component is mid-dodge, so an attack input cannot cancel an ongoing dodge. Set to `true` to allow attacking out of a dodge at any time.
 
 **Functions & events**
 - `TryAttack()` — locks out repeat input until the montage finishes (via its end delegate), so mashing the input cannot skip or overlap attacks.
 - `OnAttackHit(HitActor, HitResult)` — broadcast on every successful hit, after damage has been applied, carrying the full `FHitResult`. Use this to trigger hit VFX, sound, camera shake, or knockback without modifying the component.
 
 > **Note:** Each attack window ignores repeat hits on the same Actor (tracked internally), so a single sweeping attack cannot damage the same target multiple times.
+
+> **Note:** By default, Dodge and Attack block each other while either is in progress (an attack input during a dodge, or a dodge input during an attack, is simply ignored). This is controlled independently on each component via `Can Interrupt Attack` / `Can Interrupt Dodge`, so you can allow either or both to cancel into one another if your combat design calls for it.
 
 ---
 
@@ -282,7 +298,7 @@ Because invulnerability is decided through `CanReceiveDamage` on the character, 
 
 The default dodge/roll animation included with this package is used under the Creative Commons Attribution 4.0 International License (CC BY 4.0).
 
-- Animation: Free Sample Animation Set by VanillaLoop — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+- Animation: **[Animation pack name]** by **[Creator name]** — licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 > Replace the bracketed placeholders above with the exact creator name and pack title before publishing.
 
