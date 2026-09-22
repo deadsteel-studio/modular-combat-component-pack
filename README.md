@@ -51,11 +51,11 @@ Modular Combat Component Pack provides four self-contained Actor Components — 
 
 ## 2. System Requirements
 
-- Unreal Engine 5.3 through 5.8.
+- Unreal Engine 5.4 through 5.8.
 - Enhanced Input plugin (enabled automatically as a plugin dependency).
 - A Skeletal Mesh character using root-motion animations for Dodge and Attack (a Third Person–style character is recommended).
 
-> **Note:** This package was developed and tested in UE 5.3, with compile verification performed on UE 5.8. If you encounter an issue on a specific engine version, please reach out (see [Support](#13-support)).
+> **Note:** This package was developed and tested in UE 5.4, with compile verification performed on UE 5.8. If you encounter an issue on a specific engine version, please reach out (see [Support](#13-support)).
 
 ---
 
